@@ -86,8 +86,32 @@ public class BookApi {
          Assertions.assertEquals("Breakfast",bookingInformation.get("additionalneeds"));
          Map<String,Object> bookingDates= (Map<String, Object>) bookingInformation.get("bookingdates");
          Assertions.assertEquals("2024-01-01",bookingDates.get("checkin"));
+    }
 
+    @Test
+    public void updateBook(){
 
+        RestAssured.baseURI="https://restful-booker.herokuapp.com";
+        RestAssured.basePath="/booking/5";
+
+        Response response=RestAssured.given().header("Content-Type","application/json").header("Accept","application/json")
+                .header("Authorization","Basic YWRtaW46cGFzc3dvcmQxMjM=")
+                .body("{\n" +
+                        "    \"firstname\" : \"Ahmet\",\n" +
+                        "    \"lastname\" : \"Baldir\",\n" +
+                        "    \"totalprice\" : 555,\n" +
+                        "    \"depositpaid\" : true,\n" +
+                        "    \"bookingdates\" : {\n" +
+                        "        \"checkin\" : \"2025-01-01\",\n" +
+                        "        \"checkout\" : \"2030-01-01\"\n" +
+                        "    },\n" +
+                        "    \"additionalneeds\" : \"UPDATED SOFTWARE ENGINEER\"\n" +
+                        "}")
+                .when().put()
+                .then().statusCode(200).log().body().extract().response();
+
+            Map<String,Object> deserializedResponse=response.as(new TypeRef<Map<String, Object>>() {});
+            Assertions.assertEquals("Ahmet",deserializedResponse.get("firstname"));
     }
 
         //Please do create and update automation. Update needs Authorization(Basic etsts34234) id can be AssertNotNull
