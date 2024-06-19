@@ -2,6 +2,7 @@ package AutomationExercise;
 
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -53,6 +54,40 @@ public class BookApi {
 
         Map<String,Object> bookingDatesInformation= (Map<String, Object>) deserializedResponse.get("bookingdates");
         Assertions.assertEquals("2018-01-01",bookingDatesInformation.get("checkin"));
+    }
+
+    @Test
+    public void createBook(){
+
+         RestAssured.baseURI="https://restful-booker.herokuapp.com";
+         RestAssured.basePath="/booking";
+
+         Response response=RestAssured.given().contentType("application/json").accept("application/json")
+                 .body("{\n" +
+                         "    \"firstname\" : \"Ahmet\",\n" +
+                         "    \"lastname\" : \"Baldir\",\n" +
+                         "    \"totalprice\" : 999,\n" +
+                         "    \"depositpaid\" : true,\n" +
+                         "    \"bookingdates\" : {\n" +
+                         "        \"checkin\" : \"2024-01-01\",\n" +
+                         "        \"checkout\" : \"2025-01-01\"\n" +
+                         "    },\n" +
+                         "    \"additionalneeds\" : \"Breakfast\"\n" +
+                         "}")
+                 .when().post()
+                 .then().statusCode(200).log().body().extract().response();
+
+         Map<String,Object> deserializedResponse=response.as(new TypeRef<Map<String, Object>>() {});
+
+         Assertions.assertNotNull(deserializedResponse.get("bookingid"));
+
+          Map<String,Object> bookingInformation= (Map<String, Object>) deserializedResponse.get("booking");
+         Assertions.assertEquals("Ahmet",bookingInformation.get("firstname"));
+         Assertions.assertEquals("Breakfast",bookingInformation.get("additionalneeds"));
+         Map<String,Object> bookingDates= (Map<String, Object>) bookingInformation.get("bookingdates");
+         Assertions.assertEquals("2024-01-01",bookingDates.get("checkin"));
+
+
     }
 
         //Please do create and update automation. Update needs Authorization(Basic etsts34234) id can be AssertNotNull
