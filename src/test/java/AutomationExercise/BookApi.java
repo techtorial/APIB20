@@ -95,7 +95,8 @@ public class BookApi {
         RestAssured.basePath="/booking/5";
 
         Response response=RestAssured.given().header("Content-Type","application/json").header("Accept","application/json")
-                .header("Authorization","Basic YWRtaW46cGFzc3dvcmQxMjM=")
+//                .header("Authorization","Basic YWRtaW46cGFzc3dvcmQxMjM=")
+                .auth().preemptive().basic("admin","password123")
                 .body("{\n" +
                         "    \"firstname\" : \"Ahmet\",\n" +
                         "    \"lastname\" : \"Baldir\",\n" +
