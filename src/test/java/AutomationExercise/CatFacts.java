@@ -53,6 +53,7 @@ public class CatFacts {
                 noCatContent++;
             }
         }
+
         Assertions.assertEquals(299,moreThan50);
         Assertions.assertEquals(293,lessThan200);
         Assertions.assertEquals(260,more50Less200);
