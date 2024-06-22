@@ -83,4 +83,21 @@ public class PetStore {
          Assertions.assertEquals("Really Nice Birds",deserializedResponse.get("tags[0].name"));
          Assertions.assertEquals("Really Nice Birds",deserializedResponse.getList("tags.name").getFirst());
      }
+
+     @Test
+    public void validateAirportDetails(){
+
+        RestAssured.baseURI="https://airportgap.dev-tester.com";
+        RestAssured.basePath="/api/airports";
+
+        Response response=RestAssured.given().accept("application/json").when().get()
+                .then().statusCode(200).log().body().extract().response();
+
+        JsonPath deserializedResponse=response.jsonPath();
+
+        Assertions.assertEquals("GKA",deserializedResponse.getList("data.id").getFirst());
+        Assertions.assertEquals("GKA",deserializedResponse.get("data[0].id"));
+        Assertions.assertEquals("GKA",deserializedResponse.getString("data[0].id"));
+        Assertions.assertEquals("Goroka Airport",deserializedResponse.get("data[0].attributes.name"));
+     }
 }
