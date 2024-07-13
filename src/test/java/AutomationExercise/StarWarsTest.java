@@ -10,7 +10,7 @@ import pojo.StarwarsPeoplePojo;
 import java.util.Arrays;
 import java.util.List;
 
-public class StarWars {
+public class StarWarsTest {
 
     @Test
     public void validatePlanetInformationWithPojo(){
